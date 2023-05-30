@@ -1,5 +1,6 @@
 package com.massimoregoli.myproverbs.db
 
+import android.database.Cursor
 import androidx.room.*
 
 @Dao
@@ -25,4 +26,13 @@ interface DaoProverb {
     """
     )
     fun loadRandomProverb(favorite: Int): Proverb?
+
+    // Form CP
+    @Query("SELECT * FROM Proverb")
+    fun selectAll(): Cursor?
+
+    @Query("SELECT * FROM Proverb WHERE id=:id")
+    fun selectById(id: Int): Cursor?
+
+
 }

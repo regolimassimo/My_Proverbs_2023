@@ -1,6 +1,9 @@
 package com.massimoregoli.myproverbs
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,15 +18,27 @@ import com.massimoregoli.myproverbs.db.Repository
 import com.massimoregoli.myproverbs.ui.theme.MyProverbsTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.massimoregoli.myproverbs.contracts.ResolverHelper
 import com.massimoregoli.myproverbs.db.Proverb
 import com.massimoregoli.myproverbs.screens.MainView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val resolverHelper = ResolverHelper(this, Handler(Looper.getMainLooper()))
+        resolverHelper.titleLiveData.observe(this) {
+            Log.w("PROVERBS", "Size: ${it.size}")
+        }
+
+        resolverHelper.motd.observe(this) {
+            Log.w("PROVERBS", it)
+        }
+
         setContent {
             val context = LocalContext.current
             val db = DbProverb.getInstance(context)
